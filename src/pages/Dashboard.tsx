@@ -8,6 +8,7 @@ import { SocialMediaAPI } from "@/services/socialMediaAPI";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar } from "recharts";
 import { TrendingUp, Users, Heart, Share2, Eye, Calendar, ArrowUpRight, ArrowDownRight, PenTool, BarChart3 } from "lucide-react";
 import { PlatformIcon } from "@/components/PlatformIcon";
+import { TopPerformingPosts } from "@/components/TopPerformingPosts";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -36,42 +37,6 @@ const Dashboard = () => {
     { platform: 'Twitter', followers: 12300, engagement: 4.5, growth: 15.2 },
     { platform: 'LinkedIn', followers: 8900, engagement: 5.1, growth: 22.1 },
     { platform: 'YouTube', followers: 6200, engagement: 12.3, growth: 18.7 },
-  ];
-
-  const mockTopPosts = [
-    {
-      id: 1,
-      content: "🚀 Just launched our new AI-powered social media analytics dashboard! The future of content creation is here.",
-      platform: "linkedin",
-      likes: 1245,
-      shares: 187,
-      comments: 89,
-      engagement: "8.2%",
-      reach: 15200,
-      date: "2 hours ago"
-    },
-    {
-      id: 2,
-      content: "Behind the scenes of our product development process ✨ #ProductDevelopment #Tech",
-      platform: "instagram",
-      likes: 2890,
-      shares: 234,
-      comments: 156,
-      engagement: "7.8%",
-      reach: 37200,
-      date: "5 hours ago"
-    },
-    {
-      id: 3,
-      content: "Weekly industry insights: The rise of AI in social media marketing 📊",
-      platform: "twitter",
-      likes: 567,
-      shares: 89,
-      comments: 45,
-      engagement: "6.4%",
-      reach: 8900,
-      date: "1 day ago"
-    }
   ];
 
   useEffect(() => {
@@ -103,7 +68,6 @@ const Dashboard = () => {
         connectedAccounts: 5,
       });
 
-      setRecentPosts(mockTopPosts);
       setAnalytics(mockEngagementData);
     } catch (error) {
       console.error("Error loading dashboard data:", error);
@@ -114,7 +78,6 @@ const Dashboard = () => {
         engagementRate: 7.2,
         connectedAccounts: 5,
       });
-      setRecentPosts(mockTopPosts);
       setAnalytics(mockEngagementData);
     }
   };
@@ -253,59 +216,10 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Top Posts and Recent Activity */}
+      {/* Top Posts and Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Performing Posts */}
-        <Card className="shadow-sm border-0 bg-white/50 backdrop-blur-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Top Performing Posts
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {mockTopPosts.map((post) => (
-              <div key={post.id} className="p-4 rounded-lg border border-slate-100 bg-slate-50/30 hover:bg-slate-50/50 transition-colors">
-                <div className="flex items-start justify-between mb-3">
-                  <p className="text-sm font-medium flex-1 pr-4 line-clamp-2">
-                    {post.content}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <PlatformIcon platform={post.platform} size={16} />
-                    <span className="text-xs text-muted-foreground">{post.date}</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-4 gap-4 text-center">
-                  <div>
-                    <div className="text-sm font-semibold flex items-center justify-center gap-1">
-                      <Heart className="h-3 w-3" />
-                      {post.likes.toLocaleString()}
-                    </div>
-                    <div className="text-xs text-muted-foreground">Likes</div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold flex items-center justify-center gap-1">
-                      <Share2 className="h-3 w-3" />
-                      {post.shares}
-                    </div>
-                    <div className="text-xs text-muted-foreground">Shares</div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold flex items-center justify-center gap-1">
-                      <Eye className="h-3 w-3" />
-                      {post.reach.toLocaleString()}
-                    </div>
-                    <div className="text-xs text-muted-foreground">Reach</div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-green-600">{post.engagement}</div>
-                    <div className="text-xs text-muted-foreground">Rate</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+        <TopPerformingPosts />
 
         {/* Quick Actions */}
         <Card className="shadow-sm border-0 bg-white/50 backdrop-blur-sm">
