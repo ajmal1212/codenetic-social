@@ -17,10 +17,12 @@ import {
   Settings, 
   Shield, 
   Bell,
-  Palette,
   Moon,
   Sun,
-  Globe
+  Globe,
+  Edit,
+  Save,
+  X
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
@@ -46,66 +48,89 @@ const Profile = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-6">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Profile Header */}
-        <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm overflow-hidden">
-          <div className="h-48 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 relative">
+    <div className="min-h-screen bg-slate-50/50">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="bg-white border-b border-slate-200 -mx-6 px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-900">Profile Settings</h1>
+              <p className="text-slate-600 mt-1">Manage your account and preferences</p>
+            </div>
             <Button 
-              variant="secondary" 
-              size="sm" 
-              className="absolute top-4 right-4"
               onClick={() => setIsEditing(!isEditing)}
+              variant={isEditing ? "default" : "outline"}
+              className="flex items-center gap-2"
             >
-              <Settings className="h-4 w-4 mr-2" />
-              {isEditing ? "Save Changes" : "Edit Profile"}
+              {isEditing ? (
+                <>
+                  <Save className="h-4 w-4" />
+                  Save Changes
+                </>
+              ) : (
+                <>
+                  <Edit className="h-4 w-4" />
+                  Edit Profile
+                </>
+              )}
             </Button>
           </div>
-          <CardContent className="relative pt-0 pb-8">
-            <div className="flex flex-col md:flex-row items-start md:items-end gap-6 -mt-16">
+        </div>
+
+        {/* Profile Overview Card */}
+        <Card className="border-0 shadow-sm bg-white">
+          <CardContent className="p-8">
+            <div className="flex flex-col md:flex-row items-start gap-8">
               <div className="relative">
-                <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
+                <Avatar className="h-24 w-24 border-4 border-white shadow-lg ring-1 ring-slate-200">
                   <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
+                  <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white text-2xl font-semibold">
                     {profile.firstName[0]}{profile.lastName[0]}
                   </AvatarFallback>
                 </Avatar>
                 {isEditing && (
                   <Button 
                     size="sm" 
-                    className="absolute bottom-0 right-0 rounded-full h-8 w-8 p-0"
+                    className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0 shadow-md"
                   >
-                    <Camera className="h-4 w-4" />
+                    <Camera className="h-3 w-3" />
                   </Button>
                 )}
               </div>
-              <div className="flex-1 md:ml-6 mt-4 md:mt-0">
-                <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+              
+              <div className="flex-1 space-y-4">
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
                   <div>
-                    <h1 className="text-3xl font-bold text-gray-900">
+                    <h2 className="text-xl font-semibold text-slate-900">
                       {profile.firstName} {profile.lastName}
-                    </h1>
-                    <p className="text-gray-600 flex items-center gap-2 mt-1">
+                    </h2>
+                    <p className="text-slate-600 flex items-center gap-2 mt-1">
                       <MapPin className="h-4 w-4" />
                       {profile.location}
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">Pro Plan</Badge>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">Verified</Badge>
+                    <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200">
+                      Pro Plan
+                    </Badge>
+                    <Badge className="bg-green-50 text-green-700 hover:bg-green-100 border-green-200">
+                      Verified
+                    </Badge>
                   </div>
                 </div>
-                <p className="text-gray-700 leading-relaxed mb-4">{profile.bio}</p>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                  <span className="flex items-center gap-1">
+                
+                <p className="text-slate-700 leading-relaxed">{profile.bio}</p>
+                
+                <div className="flex flex-wrap gap-6 text-sm text-slate-600">
+                  <span className="flex items-center gap-2">
                     <Mail className="h-4 w-4" />
                     {profile.email}
                   </span>
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-2">
                     <Phone className="h-4 w-4" />
                     {profile.phone}
                   </span>
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-2">
                     <Globe className="h-4 w-4" />
                     {profile.website}
                   </span>
@@ -115,18 +140,18 @@ const Profile = () => {
           </CardContent>
         </Card>
 
-        {/* Profile Tabs */}
+        {/* Settings Tabs */}
         <Tabs defaultValue="personal" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-3 bg-white shadow-lg">
-            <TabsTrigger value="personal" className="flex items-center gap-2">
+          <TabsList className="grid w-full max-w-lg grid-cols-3 bg-slate-100">
+            <TabsTrigger value="personal" className="flex items-center gap-2 data-[state=active]:bg-white">
               <User className="h-4 w-4" />
               Personal
             </TabsTrigger>
-            <TabsTrigger value="preferences" className="flex items-center gap-2">
+            <TabsTrigger value="preferences" className="flex items-center gap-2 data-[state=active]:bg-white">
               <Settings className="h-4 w-4" />
-              Settings
+              Preferences
             </TabsTrigger>
-            <TabsTrigger value="security" className="flex items-center gap-2">
+            <TabsTrigger value="security" className="flex items-center gap-2 data-[state=active]:bg-white">
               <Shield className="h-4 w-4" />
               Security
             </TabsTrigger>
@@ -134,86 +159,88 @@ const Profile = () => {
 
           {/* Personal Information Tab */}
           <TabsContent value="personal">
-            <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5 text-blue-600" />
+            <Card className="border-0 shadow-sm bg-white">
+              <CardHeader className="pb-6">
+                <CardTitle className="flex items-center gap-3 text-slate-900">
+                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <User className="h-5 w-5 text-blue-600" />
+                  </div>
                   Personal Information
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="firstName">First Name</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-slate-700 font-medium">First Name</Label>
                     <Input
                       id="firstName"
                       value={profile.firstName}
                       disabled={!isEditing}
                       onChange={(e) => setProfile({...profile, firstName: e.target.value})}
-                      className="mt-1"
+                      className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="lastName">Last Name</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-slate-700 font-medium">Last Name</Label>
                     <Input
                       id="lastName"
                       value={profile.lastName}
                       disabled={!isEditing}
                       onChange={(e) => setProfile({...profile, lastName: e.target.value})}
-                      className="mt-1"
+                      className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="email">Email Address</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-slate-700 font-medium">Email Address</Label>
                     <Input
                       id="email"
                       type="email"
                       value={profile.email}
                       disabled={!isEditing}
                       onChange={(e) => setProfile({...profile, email: e.target.value})}
-                      className="mt-1"
+                      className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="phone">Phone Number</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-slate-700 font-medium">Phone Number</Label>
                     <Input
                       id="phone"
                       value={profile.phone}
                       disabled={!isEditing}
                       onChange={(e) => setProfile({...profile, phone: e.target.value})}
-                      className="mt-1"
+                      className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="location">Location</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="location" className="text-slate-700 font-medium">Location</Label>
                     <Input
                       id="location"
                       value={profile.location}
                       disabled={!isEditing}
                       onChange={(e) => setProfile({...profile, location: e.target.value})}
-                      className="mt-1"
+                      className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="website">Website</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="website" className="text-slate-700 font-medium">Website</Label>
                     <Input
                       id="website"
                       value={profile.website}
                       disabled={!isEditing}
                       onChange={(e) => setProfile({...profile, website: e.target.value})}
-                      className="mt-1"
+                      className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                 </div>
-                <div>
-                  <Label htmlFor="bio">Bio</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="bio" className="text-slate-700 font-medium">Bio</Label>
                   <Textarea
                     id="bio"
                     value={profile.bio}
                     disabled={!isEditing}
                     onChange={(e) => setProfile({...profile, bio: e.target.value})}
                     rows={4}
-                    className="mt-1"
+                    className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
               </CardContent>
@@ -223,18 +250,21 @@ const Profile = () => {
           {/* Preferences Tab */}
           <TabsContent value="preferences">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Bell className="h-5 w-5 text-green-600" />
+              {/* Notifications Card */}
+              <Card className="border-0 shadow-sm bg-white">
+                <CardHeader className="pb-6">
+                  <CardTitle className="flex items-center gap-3 text-slate-900">
+                    <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                      <Bell className="h-5 w-5 text-green-600" />
+                    </div>
                     Notifications
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div>
-                      <p className="font-medium">Email Notifications</p>
-                      <p className="text-sm text-gray-600">Receive updates via email</p>
+                      <p className="font-medium text-slate-900">Email Notifications</p>
+                      <p className="text-sm text-slate-600">Receive updates via email</p>
                     </div>
                     <Switch
                       checked={preferences.emailNotifications}
@@ -243,10 +273,10 @@ const Profile = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div>
-                      <p className="font-medium">Push Notifications</p>
-                      <p className="text-sm text-gray-600">Get notified on your device</p>
+                      <p className="font-medium text-slate-900">Push Notifications</p>
+                      <p className="text-sm text-slate-600">Get notified on your device</p>
                     </div>
                     <Switch
                       checked={preferences.pushNotifications}
@@ -255,10 +285,10 @@ const Profile = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div>
-                      <p className="font-medium">Weekly Digest</p>
-                      <p className="text-sm text-gray-600">Summary of your activity</p>
+                      <p className="font-medium text-slate-900">Weekly Digest</p>
+                      <p className="text-sm text-slate-600">Summary of your activity</p>
                     </div>
                     <Switch
                       checked={preferences.weeklyDigest}
@@ -270,20 +300,23 @@ const Profile = () => {
                 </CardContent>
               </Card>
 
-              <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Palette className="h-5 w-5 text-purple-600" />
+              {/* Appearance & Behavior Card */}
+              <Card className="border-0 shadow-sm bg-white">
+                <CardHeader className="pb-6">
+                  <CardTitle className="flex items-center gap-3 text-slate-900">
+                    <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
+                      {preferences.darkMode ? <Moon className="h-5 w-5 text-purple-600" /> : <Sun className="h-5 w-5 text-purple-600" />}
+                    </div>
                     Appearance & Behavior
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      {preferences.darkMode ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      {preferences.darkMode ? <Moon className="h-4 w-4 text-slate-600" /> : <Sun className="h-4 w-4 text-slate-600" />}
                       <div>
-                        <p className="font-medium">Dark Mode</p>
-                        <p className="text-sm text-gray-600">Toggle dark theme</p>
+                        <p className="font-medium text-slate-900">Dark Mode</p>
+                        <p className="text-sm text-slate-600">Toggle dark theme</p>
                       </div>
                     </div>
                     <Switch
@@ -293,10 +326,10 @@ const Profile = () => {
                       }
                     />
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div>
-                      <p className="font-medium">Auto-Post</p>
-                      <p className="text-sm text-gray-600">Automatically publish scheduled posts</p>
+                      <p className="font-medium text-slate-900">Auto-Post</p>
+                      <p className="text-sm text-slate-600">Automatically publish scheduled posts</p>
                     </div>
                     <Switch
                       checked={preferences.autoPost}
@@ -305,13 +338,13 @@ const Profile = () => {
                       }
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="timezone">Timezone</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="timezone" className="text-slate-700 font-medium">Timezone</Label>
                     <Input
                       id="timezone"
                       value={profile.timezone}
                       onChange={(e) => setProfile({...profile, timezone: e.target.value})}
-                      className="mt-1"
+                      className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                 </CardContent>
@@ -321,46 +354,59 @@ const Profile = () => {
 
           {/* Security Tab */}
           <TabsContent value="security">
-            <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-red-600" />
+            <Card className="border-0 shadow-sm bg-white">
+              <CardHeader className="pb-6">
+                <CardTitle className="flex items-center gap-3 text-slate-900">
+                  <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+                    <Shield className="h-5 w-5 text-red-600" />
+                  </div>
                   Security Settings
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      placeholder="Enter current password"
-                      className="mt-1"
-                    />
+              <CardContent className="space-y-8">
+                <div className="space-y-6">
+                  <h4 className="font-semibold text-slate-900">Change Password</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="currentPassword" className="text-slate-700 font-medium">Current Password</Label>
+                      <Input
+                        id="currentPassword"
+                        type="password"
+                        placeholder="Enter current password"
+                        className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="newPassword" className="text-slate-700 font-medium">New Password</Label>
+                      <Input
+                        id="newPassword"
+                        type="password"
+                        placeholder="Enter new password"
+                        className="border-slate-200 focus:border-blue-500 focus:ring-blue-500"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      placeholder="Enter new password"
-                      className="mt-1"
-                    />
+                  <div className="flex gap-3">
+                    <Button className="bg-blue-600 hover:bg-blue-700">Update Password</Button>
+                    <Button variant="outline" className="border-slate-200">Enable 2FA</Button>
                   </div>
                 </div>
-                <div className="flex gap-4">
-                  <Button variant="outline">Change Password</Button>
-                  <Button variant="outline">Enable 2FA</Button>
-                </div>
-                <div className="pt-6 border-t">
-                  <h4 className="font-semibold text-red-600 mb-2">Danger Zone</h4>
-                  <p className="text-sm text-gray-600 mb-4">
-                    These actions are irreversible. Please proceed with caution.
-                  </p>
-                  <div className="flex gap-4">
-                    <Button variant="destructive" size="sm">Delete Account</Button>
-                    <Button variant="outline" size="sm">Export Data</Button>
+                
+                <div className="border-t border-slate-200 pt-8">
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                    <h4 className="font-semibold text-red-900 mb-2 flex items-center gap-2">
+                      <Shield className="h-4 w-4" />
+                      Danger Zone
+                    </h4>
+                    <p className="text-sm text-red-700 mb-4">
+                      These actions are irreversible. Please proceed with caution.
+                    </p>
+                    <div className="flex gap-3">
+                      <Button variant="destructive" size="sm">Delete Account</Button>
+                      <Button variant="outline" size="sm" className="border-red-200 text-red-700 hover:bg-red-50">
+                        Export Data
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
