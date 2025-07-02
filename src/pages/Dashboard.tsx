@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SocialMediaAPI } from "@/services/socialMediaAPI";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar } from "recharts";
-import { TrendingUp, Users, Heart, Share2, Eye, Calendar, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { TrendingUp, Users, Heart, Share2, Eye, Calendar, ArrowUpRight, ArrowDownRight, PenTool, BarChart3 } from "lucide-react";
 import { PlatformIcon } from "@/components/PlatformIcon";
 
 const Dashboard = () => {
