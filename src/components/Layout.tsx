@@ -1,6 +1,8 @@
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { ReactNode } from "react";
 
 interface LayoutProps {
@@ -8,6 +10,8 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
+  const { signOut } = useAuth();
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-accent">
@@ -19,6 +23,9 @@ export const Layout = ({ children }: LayoutProps) => {
               <div className="text-2xl font-bold text-primary">Codenetic Social</div>
             </div>
             <div className="flex items-center gap-3">
+              <Button variant="outline" size="sm" onClick={signOut}>
+                Sign Out
+              </Button>
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-medium">
                 JD
               </div>

@@ -9,7 +9,211 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      follower_analytics: {
+        Row: {
+          followers_count: number
+          following_count: number | null
+          id: string
+          posts_count: number | null
+          recorded_at: string | null
+          social_account_id: string
+        }
+        Insert: {
+          followers_count: number
+          following_count?: number | null
+          id?: string
+          posts_count?: number | null
+          recorded_at?: string | null
+          social_account_id: string
+        }
+        Update: {
+          followers_count?: number
+          following_count?: number | null
+          id?: string
+          posts_count?: number | null
+          recorded_at?: string | null
+          social_account_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follower_analytics_social_account_id_fkey"
+            columns: ["social_account_id"]
+            isOneToOne: false
+            referencedRelation: "social_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_analytics: {
+        Row: {
+          clicks_count: number | null
+          comments_count: number | null
+          engagement_rate: number | null
+          fetched_at: string | null
+          id: string
+          likes_count: number | null
+          platform: string
+          platform_post_id: string | null
+          post_id: string
+          shares_count: number | null
+          views_count: number | null
+        }
+        Insert: {
+          clicks_count?: number | null
+          comments_count?: number | null
+          engagement_rate?: number | null
+          fetched_at?: string | null
+          id?: string
+          likes_count?: number | null
+          platform: string
+          platform_post_id?: string | null
+          post_id: string
+          shares_count?: number | null
+          views_count?: number | null
+        }
+        Update: {
+          clicks_count?: number | null
+          comments_count?: number | null
+          engagement_rate?: number | null
+          fetched_at?: string | null
+          id?: string
+          likes_count?: number | null
+          platform?: string
+          platform_post_id?: string | null
+          post_id?: string
+          shares_count?: number | null
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_analytics_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          media_urls: string[] | null
+          platforms: string[]
+          post_results: Json | null
+          scheduled_time: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          media_urls?: string[] | null
+          platforms: string[]
+          post_results?: Json | null
+          scheduled_time?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          media_urls?: string[] | null
+          platforms?: string[]
+          post_results?: Json | null
+          scheduled_time?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      social_accounts: {
+        Row: {
+          access_token: string
+          account_id: string
+          created_at: string | null
+          display_name: string | null
+          followers_count: number | null
+          id: string
+          is_connected: boolean | null
+          platform: string
+          profile_picture_url: string | null
+          refresh_token: string | null
+          token_expires_at: string | null
+          updated_at: string | null
+          user_id: string
+          username: string
+        }
+        Insert: {
+          access_token: string
+          account_id: string
+          created_at?: string | null
+          display_name?: string | null
+          followers_count?: number | null
+          id?: string
+          is_connected?: boolean | null
+          platform: string
+          profile_picture_url?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id: string
+          username: string
+        }
+        Update: {
+          access_token?: string
+          account_id?: string
+          created_at?: string | null
+          display_name?: string | null
+          followers_count?: number | null
+          id?: string
+          is_connected?: boolean | null
+          platform?: string
+          profile_picture_url?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

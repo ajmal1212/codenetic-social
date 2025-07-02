@@ -1,183 +1,152 @@
 
+import { useEffect, useState } from "react";
 import { StatsCard } from "@/components/StatsCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Plus, Clock, Check, Calendar } from "lucide-react";
-import { PlatformIcon } from "@/components/PlatformIcon";
-import { useNavigate } from "react-router-dom";
+import { SocialMediaAPI } from "@/services/socialMediaAPI";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    totalPosts: 0,
+    totalFollowers: 0,
+    engagementRate: 0,
+    connectedAccounts: 0,
+  });
+  const [recentPosts, setRecentPosts] = useState<any[]>([]);
+  const [analytics, setAnalytics] = useState<any[]>([]);
 
-  const todaysPosts = [
-    {
-      id: 1,
-      content: "Check out our latest product update! 🚀",
-      platforms: ["facebook", "twitter", "linkedin"],
-      scheduledTime: "2:00 PM",
-      status: "scheduled"
-    },
-    {
-      id: 2,
-      content: "Behind the scenes at our team meeting",
-      platforms: ["instagram", "facebook"],
-      scheduledTime: "4:30 PM",
-      status: "scheduled"
-    }
-  ];
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
 
-  const recentActivity = [
-    {
-      id: 1,
-      action: "Posted successfully",
-      platform: "facebook",
-      time: "2 hours ago",
-      status: "success"
-    },
-    {
-      id: 2,
-      action: "Post scheduled",
-      platform: "instagram",
-      time: "3 hours ago",
-      status: "scheduled"
-    },
-    {
-      id: 3,
-      action: "Posted successfully",
-      platform: "twitter",
-      time: "5 hours ago",
-      status: "success"
+  const loadDashboardData = async () => {
+    try {
+      const [accounts, posts, analyticsData] = await Promise.all([
+        SocialMediaAPI.getSocialAccounts(),
+        SocialMediaAPI.getPosts(),
+        SocialMediaAPI.getAnalytics(),
+      ]);
+
+      const connectedAccounts = accounts.filter(acc => acc.is_connected);
+      const totalFollowers = connectedAccounts.reduce(
+        (sum, acc) => sum + (acc.followers_count || 0), 0
+      );
+
+      const avgEngagement = analyticsData.length > 0
+        ? analyticsData.reduce((sum, item) => sum + item.engagement_rate, 0) / analyticsData.length
+        : 0;
+
+      setStats({
+        totalPosts: posts.length,
+        totalFollowers,
+        engagementRate: avgEngagement,
+        connectedAccounts: connectedAccounts.length,
+      });
+
+      setRecentPosts(posts.slice(0, 5));
+      setAnalytics(analyticsData.slice(0, 7));
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
     }
-  ];
+  };
+
+  const chartData = analytics.map((item, index) => ({
+    name: `Day ${index + 1}`,
+    engagement: item.engagement_rate,
+    views: item.views_count / 100, // Scale down for better visualization
+  }));
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's your social media overview.</p>
-        </div>
-        <Button onClick={() => navigate("/compose")} className="bg-primary hover:bg-primary/90">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Post
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <p className="text-muted-foreground">
+          Welcome back! Here's what's happening with your social media.
+        </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
           title="Total Posts"
-          value="156"
-          change="+12% from last month"
-          changeType="positive"
-          icon={<Check className="h-4 w-4" />}
+          value={stats.totalPosts.toString()}
+          change="+12%"
+          trend="up"
         />
         <StatsCard
           title="Total Followers"
-          value="12.4K"
-          change="+8.2% from last month"
-          changeType="positive"
-          icon={<Clock className="h-4 w-4" />}
+          value={stats.totalFollowers.toLocaleString()}
+          change="+5.2%"
+          trend="up"
         />
         <StatsCard
           title="Engagement Rate"
-          value="4.7%"
-          change="+0.5% from last month"
-          changeType="positive"
-          icon={<Calendar className="h-4 w-4" />}
+          value={`${stats.engagementRate.toFixed(1)}%`}
+          change="+2.1%"
+          trend="up"
         />
         <StatsCard
-          title="Scheduled Posts"
-          value="23"
-          change="Next 7 days"
-          changeType="neutral"
-          icon={<Calendar className="h-4 w-4" />}
+          title="Connected Accounts"
+          value={stats.connectedAccounts.toString()}
+          change="0%"
+          trend="neutral"
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Today's Scheduled Posts */}
-        <Card className="bg-white shadow-sm">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">Today's Scheduled Posts</CardTitle>
+            <CardTitle>Engagement Overview</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {todaysPosts.map((post) => (
-              <div key={post.id} className="p-4 border border-border rounded-lg">
-                <p className="text-sm text-foreground mb-2">{post.content}</p>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    {post.platforms.map((platform) => (
-                      <PlatformIcon key={platform} platform={platform} size={16} />
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Clock className="w-4 h-4" />
-                    {post.scheduledTime}
-                  </div>
-                </div>
-              </div>
-            ))}
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => navigate("/calendar")}
-            >
-              View All Scheduled Posts
-            </Button>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Line 
+                  type="monotone" 
+                  dataKey="engagement" 
+                  stroke="#2D5BFF" 
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        {/* Recent Activity */}
-        <Card className="bg-white shadow-sm">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">Recent Activity</CardTitle>
+            <CardTitle>Recent Posts</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-center justify-between p-3 border border-border rounded-lg">
-                <div className="flex items-center gap-3">
-                  <PlatformIcon platform={activity.platform} size={20} />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{activity.action}</p>
-                    <p className="text-xs text-muted-foreground">{activity.time}</p>
+          <CardContent>
+            <div className="space-y-4">
+              {recentPosts.length > 0 ? (
+                recentPosts.map((post) => (
+                  <div key={post.id} className="border-b pb-3 last:border-b-0">
+                    <p className="text-sm font-medium line-clamp-2">
+                      {post.content}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-muted-foreground">
+                        {post.platforms.join(", ")}
+                      </span>
+                      <span className="text-xs text-muted-foreground">•</span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(post.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className={`w-2 h-2 rounded-full ${
-                  activity.status === 'success' ? 'bg-secondary' : 'bg-yellow-500'
-                }`} />
-              </div>
-            ))}
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => navigate("/analytics")}
-            >
-              View Detailed Analytics
-            </Button>
+                ))
+              ) : (
+                <p className="text-muted-foreground text-center py-4">
+                  No posts yet. Create your first post!
+                </p>
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* Quick Actions */}
-      <Card className="bg-gradient-to-r from-primary to-blue-600 text-white">
-        <CardContent className="p-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Ready to create your next post?</h3>
-              <p className="opacity-90">Compose and schedule content across all your social media platforms</p>
-            </div>
-            <Button 
-              variant="secondary" 
-              size="lg"
-              onClick={() => navigate("/compose")}
-              className="bg-white text-primary hover:bg-gray-100"
-            >
-              Get Started
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
