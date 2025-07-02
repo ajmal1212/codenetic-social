@@ -70,25 +70,25 @@ const Dashboard = () => {
           title="Total Posts"
           value={stats.totalPosts.toString()}
           change="+12%"
-          trend="up"
+          changeType="positive"
         />
         <StatsCard
           title="Total Followers"
           value={stats.totalFollowers.toLocaleString()}
           change="+5.2%"
-          trend="up"
+          changeType="positive"
         />
         <StatsCard
           title="Engagement Rate"
           value={`${stats.engagementRate.toFixed(1)}%`}
           change="+2.1%"
-          trend="up"
+          changeType="positive"
         />
         <StatsCard
           title="Connected Accounts"
           value={stats.connectedAccounts.toString()}
           change="0%"
-          trend="neutral"
+          changeType="neutral"
         />
       </div>
 
