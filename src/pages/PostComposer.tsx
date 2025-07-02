@@ -7,26 +7,6 @@ import { Sparkles, Zap, Calendar, Target } from "lucide-react";
 const PostComposer = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
-      {/* Full-width Header Section */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center space-y-6">
-            <div className="flex items-center justify-center gap-3">
-              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl">
-                <Sparkles className="h-8 w-8 text-white" />
-              </div>
-              <h1 className="text-5xl font-bold tracking-tight">
-                Create Amazing Content
-              </h1>
-            </div>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Share your content across multiple platforms with our intelligent posting system. 
-              Reach your audience wherever they are with beautiful, engaging posts.
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* Feature Highlights - Full Width */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 py-12">
         <div className="max-w-7xl mx-auto px-6">

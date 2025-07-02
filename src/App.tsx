@@ -12,6 +12,7 @@ import PostComposer from "./pages/PostComposer";
 import ContentCalendar from "./pages/ContentCalendar";
 import Analytics from "./pages/Analytics";
 import Accounts from "./pages/Accounts";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const AppContent = () => {
         <Route path="/calendar" element={<ContentCalendar />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/accounts" element={<Accounts />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>

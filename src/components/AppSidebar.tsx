@@ -11,7 +11,7 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Home, PenTool, Calendar, BarChart3, Users, Settings, Zap } from "lucide-react";
+import { Home, PenTool, Calendar, BarChart3, Users, Settings, Zap, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -40,6 +40,11 @@ const menuItems = [
     title: "Connected Accounts",
     url: "/accounts",
     icon: Users,
+  },
+  {
+    title: "Profile",
+    url: "/profile",
+    icon: User,
   },
 ];
 

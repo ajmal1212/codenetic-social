@@ -3,10 +3,18 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { ReactNode } from "react";
-import { Bell, Search } from "lucide-react";
+import { ReactNode, useState } from "react";
+import { Bell, Search, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+  DropdownMenuSeparator 
+} from "@/components/ui/dropdown-menu";
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,6 +22,12 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const { signOut } = useAuth();
+  const [notificationCount, setNotificationCount] = useState(3);
+
+  const handleNotificationClick = () => {
+    // Reset notification count when clicked
+    setNotificationCount(0);
+  };
 
   return (
     <SidebarProvider>
@@ -32,21 +46,90 @@ export const Layout = ({ children }: LayoutProps) => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" className="relative">
-                <Bell className="h-4 w-4" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
-                  3
-                </span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                asChild
+                className="hidden sm:flex"
+              >
+                <a 
+                  href="https://docs.lovable.dev" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  Docs
+                </a>
               </Button>
-              <div className="flex items-center gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback className="bg-primary text-primary-foreground">JD</AvatarFallback>
-                </Avatar>
-                <Button variant="outline" size="sm" onClick={signOut} className="hidden sm:flex">
-                  Sign Out
-                </Button>
-              </div>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="relative"
+                    onClick={handleNotificationClick}
+                  >
+                    <Bell className="h-4 w-4" />
+                    {notificationCount > 0 && (
+                      <Badge 
+                        variant="destructive" 
+                        className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                      >
+                        {notificationCount}
+                      </Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80">
+                  <div className="p-2">
+                    <h4 className="font-semibold text-sm mb-2">Notifications</h4>
+                    <div className="space-y-2">
+                      <div className="p-2 rounded-lg bg-blue-50 border border-blue-200">
+                        <p className="text-sm font-medium">Post Published Successfully</p>
+                        <p className="text-xs text-muted-foreground">Your Instagram post went live 2 hours ago</p>
+                      </div>
+                      <div className="p-2 rounded-lg bg-green-50 border border-green-200">
+                        <p className="text-sm font-medium">Scheduled Post Ready</p>
+                        <p className="text-xs text-muted-foreground">LinkedIn post will be published in 30 minutes</p>
+                      </div>
+                      <div className="p-2 rounded-lg bg-yellow-50 border border-yellow-200">
+                        <p className="text-sm font-medium">Analytics Update</p>
+                        <p className="text-xs text-muted-foreground">Weekly engagement report is now available</p>
+                      </div>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-center justify-center">
+                    View All Notifications
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-3">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src="/placeholder.svg" />
+                      <AvatarFallback className="bg-primary text-primary-foreground">JD</AvatarFallback>
+                    </Avatar>
+                    <span className="hidden sm:block">John Doe</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    Profile Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    Account Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </header>
           <main className="flex-1 p-6 overflow-auto">
