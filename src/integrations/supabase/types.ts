@@ -44,6 +44,48 @@ export type Database = {
           },
         ]
       }
+      instagram_accounts: {
+        Row: {
+          access_token: string
+          connected_at: string | null
+          created_at: string | null
+          id: string
+          ig_user_id: string
+          page_id: string
+          profile_pic: string | null
+          refresh_token: string | null
+          updated_at: string | null
+          user_id: string
+          username: string
+        }
+        Insert: {
+          access_token: string
+          connected_at?: string | null
+          created_at?: string | null
+          id?: string
+          ig_user_id: string
+          page_id: string
+          profile_pic?: string | null
+          refresh_token?: string | null
+          updated_at?: string | null
+          user_id: string
+          username: string
+        }
+        Update: {
+          access_token?: string
+          connected_at?: string | null
+          created_at?: string | null
+          id?: string
+          ig_user_id?: string
+          page_id?: string
+          profile_pic?: string | null
+          refresh_token?: string | null
+          updated_at?: string | null
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
       post_analytics: {
         Row: {
           clicks_count: number | null
