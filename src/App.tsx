@@ -1,74 +1,59 @@
 
-import { Suspense, lazy } from "react";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import { Layout } from "./components/Layout";
-
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Analytics = lazy(() => import("./pages/Analytics"));
-const PostComposer = lazy(() => import("./pages/PostComposer"));
-const Accounts = lazy(() => import("./pages/Accounts"));
-const ContentCalendar = lazy(() => import("./pages/ContentCalendar"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Instagram = lazy(() => import("./pages/Instagram"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+import { Layout } from "@/components/Layout";
+import { AuthForm } from "@/components/AuthForm";
+import { useAuth } from "@/hooks/useAuth";
+import Dashboard from "./pages/Dashboard";
+import PostComposer from "./pages/PostComposer";
+import ContentCalendar from "./pages/ContentCalendar";
+import Analytics from "./pages/Analytics";
+import Accounts from "./pages/Accounts";
+import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+
+const AppContent = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthForm />;
+  }
+
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/compose" element={<PostComposer />} />
+        <Route path="/calendar" element={<ContentCalendar />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/accounts" element={<Accounts />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Layout>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
+      <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth/instagram/callback" element={<Index />} />
-          <Route element={<Layout />}>
-            <Route path="/dashboard" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Dashboard />
-              </Suspense>
-            } />
-            <Route path="/analytics" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Analytics />
-              </Suspense>
-            } />
-            <Route path="/create" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <PostComposer />
-              </Suspense>
-            } />
-            <Route path="/accounts" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Accounts />
-              </Suspense>
-            } />
-            <Route path="/calendar" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <ContentCalendar />
-              </Suspense>
-            } />
-            <Route path="/profile" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Profile />
-              </Suspense>
-            } />
-            <Route path="/instagram" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Instagram />
-              </Suspense>
-            } />
-          </Route>
-          <Route path="*" element={
-            <Suspense fallback={<div>Loading...</div>}>
-              <NotFound />
-            </Suspense>
-          } />
-        </Routes>
+        <AppContent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

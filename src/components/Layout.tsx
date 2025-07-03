@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Bell, Search, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,9 +15,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator 
 } from "@/components/ui/dropdown-menu";
-import { Outlet } from "react-router-dom";
 
-export const Layout = () => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export const Layout = ({ children }: LayoutProps) => {
   const { signOut } = useAuth();
   const [notificationCount, setNotificationCount] = useState(3);
 
@@ -131,7 +134,7 @@ export const Layout = () => {
           </header>
           <main className="flex-1 p-6 overflow-auto">
             <div className="max-w-7xl mx-auto">
-              <Outlet />
+              {children}
             </div>
           </main>
         </div>
