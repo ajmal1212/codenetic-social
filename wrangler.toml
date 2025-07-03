@@ -1,8 +1,0 @@
-name = "social"
-compatibility_date = "2025-07-03"
-main = "worker.js"
-workers_dev = true
-account_id = "9f8851145c6527eb9fb8b76161dc230d"
-
-[site]
-bucket = "./dist"

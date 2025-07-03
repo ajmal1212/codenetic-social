@@ -9,7 +9,6 @@
     "build": "vite build",
     "deploy": "wrangler deploy",
     "build:dev": "vite build --mode development",
-    "postbuild": "mkdir -p worker && mv dist/_worker.js worker/index.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
